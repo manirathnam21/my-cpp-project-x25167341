@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="auth-page">
+    <div class="auth-card auth-card-wide">
+        <div class="auth-header">
+            <h2 class="auth-title">Join the Movement</h2>
+            <p class="auth-sub">Create your account and start shopping </p>
+        </div>
+        <div class="auth-body">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button class="btn btn-primary btn-block auth-submit mt-3" type="submit">
+                    <i class="fas fa-user-plus mr-2"></i>Create Account
+                </button>
+            </form>
+        </div>
+        <div class="auth-footer">
+            <span>Already have an account?</span>
+            <a href="{% url 'login' %}">Sign in</a>
+        </div>
+    </div>
+    <div class="auth-side d-none d-lg-flex">
+        <img src="https://imgs.search.brave.com/xzba1syFoQicGErCpyUGwyIwgcSKgIAnAah4U_bVVJ0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMjMv/MjM2LzU1Mi9zbWFs/bC9haS1nZW5lcmF0/ZWQtdHdvLXJhYmJp/dHMtY3V0ZS1mbHVm/ZnktZG9nLWFuZC1y/ZWQtZ2luZ2VyLWNh/dC1zaXR0aW5nLXNp/ZGUtYnktc2lkZS1p/bi1zaGVsdGVyLXBl/dC1hZG9wdGlvbi1j/b25jZXB0LWdlbmVy/YXRpdmUtYWktcGhv/dG8uanBn" alt="Paw Sphere" class="auth-side-img">
+        <div class="auth-side-overlay">
+        </div>
+    </div>
+</div>
+
+<style>
+.auth-page { display:flex; min-height:70vh; border-radius:20px; overflow:hidden; border:1px solid var(--border); box-shadow:var(--shadow-lg); }
+.auth-card { background:white; flex:0 0 440px; display:flex; flex-direction:column; padding:3rem; }
+.auth-card-wide { flex:0 0 480px; }
+.auth-header { text-align:center; margin-bottom:2rem; }
+.auth-logo { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:600; color:var(--sage); letter-spacing:0.1em; margin-bottom:0.75rem; }
+.auth-title { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:400; margin-bottom:6px; }
+.auth-sub { font-size:0.88rem; color:var(--gray-600); }
+.auth-body { flex:1; overflow-y:auto; }
+.auth-submit { padding:0.85rem; font-size:0.9rem; border-radius:10px; }
+.auth-footer { text-align:center; padding-top:1.5rem; border-top:1px solid var(--border); margin-top:1.5rem; font-size:0.85rem; color:var(--gray-600); }
+.auth-footer a { color:var(--sage-dark); font-weight:600; text-decoration:none; margin-left:6px; }
+.auth-side { flex:1; position:relative; min-height:400px; }
+.auth-side-img { width:100%; height:100%; object-fit:cover; }
+.auth-side-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(45,45,45,0.75), rgba(45,45,45,0.2)); display:flex; flex-direction:column; justify-content:flex-end; padding:2.5rem; }
+.register-promises { display:flex; flex-direction:column; gap:14px; }
+.register-promise { display:flex; align-items:center; gap:12px; color:white; font-size:0.9rem; }
+.register-promise i { width:32px; height:32px; background:rgba(255,255,255,0.15); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:0.85rem; flex-shrink:0; }
+@media (max-width:768px) { .auth-card { flex:1; padding:2rem; } }
+</style>
+{% endblock content %}

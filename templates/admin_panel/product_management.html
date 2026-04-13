@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1>Product Management</h1>
+            <p class="text-muted mb-0" style="font-size:0.9rem;">Add, edit, and manage your product catalogue</p>
+        </div>
+        <a href="{% url 'product-create' %}" class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>Add Product
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <!-- <th>Eco Score</th> -->
+                        <th>Stock</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-thumbnail" style="width:52px;height:52px;object-fit:cover;">
+                        </td>
+                        <td>
+                            <div style="font-weight:500; font-size:0.9rem;">{{ product.name }}</div>
+                            <div style="font-size:0.78rem; color:var(--gray-600);">ID: {{ product.id }}</div>
+                        </td>
+                        <td><strong style="font-family:'Cormorant Garamond',serif; font-size:1.05rem;">€{{ product.price }}</strong></td>
+                        <td>
+                            <span class="category-tag">{{ product.category.name }}</span>
+                        </td>
+                        <!-- <td>
+                            {% if product.sustainability_score >= 80 %}
+                                <span class="badge badge-success">{{ product.sustainability_score }}</span>
+                            {% elif product.sustainability_score >= 50 %}
+                                <span class="badge badge-info">{{ product.sustainability_score }}</span>
+                            {% else %}
+                                <span class="badge badge-warning">{{ product.sustainability_score }}</span>
+                            {% endif %}
+                        </td> -->
+                        <td>
+                            {% if product.in_stock %}
+                                <span class="badge badge-success">In Stock</span>
+                            {% else %}
+                                <span class="badge badge-danger">Out</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-6">
+                                <a href="{% url 'product-detail' product.id %}" class="btn btn-sm btn-outline-secondary mr-1" title="View"><i class="fas fa-eye"></i></a>
+                                <a href="{% url 'product-update' product.id %}" class="btn btn-sm btn-outline-primary mr-1" title="Edit"><i class="fas fa-edit"></i></a>
+                                <a href="{% url 'product-delete' product.id %}" class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="7" class="text-center text-muted py-4">No products found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.category-tag {
+    background:var(--sand-light); color:var(--terracotta);
+    padding:3px 10px; border-radius:20px; font-size:0.75rem; font-weight:600;
+}
+</style>
+{% endblock content %}

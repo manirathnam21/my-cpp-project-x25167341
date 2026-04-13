@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="confirmation-hero">
+    <div class="confirmation-icon-wrap">
+        <div class="confirmation-icon"><i class="fas fa-check"></i></div>
+    </div>
+    <h1 class="confirmation-title">Order Confirmed!</h1>
+    <p class="confirmation-sub">Thank you for shopping . Your order <strong>#{{ order.id }}</strong> has been placed.</p>
+    <p class="confirmation-email">A confirmation has been sent to <strong>{{ order.email }}</strong></p>
+    <div class="confirmation-actions">
+        <a href="{% url 'order-detail' order.id %}" class="btn btn-primary mr-3">
+            <i class="fas fa-file-alt mr-2"></i>View Order
+        </a>
+        <a href="{% url 'products' %}" class="btn btn-outline-secondary">
+            Continue Shopping
+        </a>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <!-- SHIPPING -->
+    <div class="col-md-5 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <i class="fas fa-map-marker-alt mr-2" style="color:var(--sage);"></i>Shipping Address
+            </div>
+            <div class="card-body">
+                <p class="confirm-name">{{ order.full_name }}</p>
+                <p class="confirm-address">
+                    {{ order.address }}<br>
+                    {{ order.city }}, {{ order.postal_code }}<br>
+                    {{ order.country }}
+                </p>
+                <div class="delivery-estimate">
+                    <i class="fas fa-truck mr-2" style="color:var(--sage);"></i>
+                    Estimated delivery: 5–7 business days
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER INFO -->
+    <div class="col-md-7 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <i class="fas fa-receipt mr-2" style="color:var(--sage);"></i>Order Details
+            </div>
+            <div class="card-body">
+                <div class="order-info-grid">
+                    <div class="order-info-item">
+                        <span class="info-label">Order #</span>
+                        <span class="info-value">#{{ order.id }}</span>
+                    </div>
+                    <div class="order-info-item">
+                        <span class="info-label">Date</span>
+                        <span class="info-value">{{ order.created|date:"F d, Y" }}</span>
+                    </div>
+                    <div class="order-info-item">
+                        <span class="info-label">Status</span>
+                        <span class="info-value"><span class="badge badge-warning">{{ order.get_status_display }}</span></span>
+                    </div>
+                    <div class="order-info-item">
+                        <span class="info-label">Total</span>
+                        <span class="info-value total-val">€{{ order.total_price }}</span>
+                    </div>
+                </div>
+
+                <div class="confirm-items mt-3">
+                    {% for item in order.items.all %}
+                    <div class="confirm-item">
+                        <span class="confirm-item-name">{{ item.product.name }}</span>
+                        <span class="confirm-item-qty text-muted">×{{ item.quantity }}</span>
+                        <span class="confirm-item-price">€{{ item.get_total_price }}</span>
+                    </div>
+                    {% endfor %}
+                    <div class="confirm-item confirm-total-row">
+                        <span><strong>Total</strong></span>
+                        <span></span>
+                        <span><strong>€{{ order.total_price }}</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+.confirmation-hero {
+    text-align: center;
+    padding: 3.5rem 2rem;
+    background: linear-gradient(135deg, #F0F7F2 0%, #F7F3EE 100%);
+    border-radius: 20px;
+    border: 1px solid #C8E6D0;
+    margin-bottom: 2rem;
+}
+.confirmation-icon-wrap { margin-bottom: 1.5rem; }
+.confirmation-icon {
+    width: 72px; height: 72px;
+    background: var(--sage); color: white;
+    border-radius: 50%; font-size: 1.8rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 12px rgba(123,158,135,0.15);
+}
+.confirmation-title { font-family:'Cormorant Garamond',serif; font-size:2.4rem; margin-bottom:0.5rem; }
+.confirmation-sub { font-size:1rem; color:var(--charcoal); margin-bottom:6px; }
+.confirmation-email { font-size:0.88rem; color:var(--gray-600); margin-bottom:2rem; }
+.confirmation-actions { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; }
+
+.confirm-name { font-weight:600; font-size:1rem; margin-bottom:4px; }
+.confirm-address { font-size:0.9rem; color:var(--gray-600); line-height:1.7; margin-bottom:1rem; }
+.delivery-estimate { font-size:0.82rem; color:var(--sage-dark); background:#F0F7F2; padding:8px 12px; border-radius:8px; }
+
+.order-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.order-info-item { display:flex; flex-direction:column; gap:3px; }
+.info-label { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--gray-600); font-weight:600; }
+.info-value { font-size:0.95rem; color:var(--charcoal); font-weight:500; }
+.total-val { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; }
+
+.confirm-items { border-top:1px solid var(--border); padding-top:12px; }
+.confirm-item { display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:7px 0; border-bottom:1px solid var(--border); font-size:0.88rem; }
+.confirm-total-row { border-bottom:none; padding-top:10px; }
+.confirm-item-price { text-align:right; font-weight:500; }
+
+.eco-confirmation-note {
+    display:flex; align-items:flex-start; gap:1.5rem;
+    background:#F0F7F2; border:1px solid #C8E6D0;
+    border-radius:var(--radius); padding:1.5rem 2rem; margin-top:1rem;
+}
+.eco-leaf { font-size:2rem; color:var(--sage); flex-shrink:0; margin-top:3px; }
+.eco-confirmation-note p { font-size:0.88rem; color:var(--gray-600); margin:4px 0 0; line-height:1.7; }
+</style>
+{% endblock content %}

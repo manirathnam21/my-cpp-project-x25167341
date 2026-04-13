@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="page-header">
+    <h1>Checkout</h1>
+    <div class="checkout-steps mt-3">
+        <div class="step step-active"><span class="step-num">1</span> Shipping</div>
+        <div class="step-line"></div>
+        <div class="step step-active"><span class="step-num">2</span> Payment</div>
+        <div class="step-line"></div>
+        <div class="step"><span class="step-num">3</span> Confirm</div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- FORM -->
+    <div class="col-lg-7 mb-4">
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- SHIPPING -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-map-marker-alt mr-2" style="color:var(--sage);"></i>Shipping Information
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">{{ form.full_name|as_crispy_field }}</div>
+                        <div class="col-md-6">{{ form.email|as_crispy_field }}</div>
+                    </div>
+                    {{ form.address|as_crispy_field }}
+                    <div class="row">
+                        <div class="col-md-6">{{ form.city|as_crispy_field }}</div>
+                        <div class="col-md-6">{{ form.postal_code|as_crispy_field }}</div>
+                    </div>
+                    {{ form.country|as_crispy_field }}
+                </div>
+            </div>
+
+            <!-- PAYMENT -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-credit-card mr-2" style="color:var(--sage);"></i>Payment Details
+                </div>
+                <div class="card-body">
+                    <div class="demo-notice">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Demo mode — no actual payment will be processed.
+                    </div>
+                    <div class="form-group">
+                        <label>Card Number</label>
+                        <div class="card-input-wrap">
+                            <input type="text" class="form-control" placeholder="4242 4242 4242 4242">
+                            <div class="card-icons">
+                                <i class="fab fa-cc-visa"></i>
+                                <i class="fab fa-cc-mastercard"></i>
+                                <i class="fab fa-cc-amex"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Expiry Date</label>
+                                <input type="text" class="form-control" placeholder="MM / YY">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>CVV</label>
+                                <input type="text" class="form-control" placeholder="•••">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'cart' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Bag
+                </a>
+                <button type="submit" class="btn btn-success btn-lg place-order-btn">
+                    <i class="fas fa-lock mr-2"></i>Place Order
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- SUMMARY SIDEBAR -->
+    <div class="col-lg-5">
+        <div class="card checkout-summary-card">
+            <div class="card-header">Order Summary</div>
+            <div class="card-body p-0">
+                <div class="checkout-items">
+                    {% for item in cart_items %}
+                    <div class="checkout-item">
+                        <div class="checkout-item-img-wrap">
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="checkout-item-img">
+                            <span class="item-qty-badge">{{ item.quantity }}</span>
+                        </div>
+                        <div class="checkout-item-info">
+                            <p class="checkout-item-name">{{ item.product.name|truncatechars:30 }}</p>
+                            <p class="checkout-item-cat">{{ item.product.category.name }}</p>
+                        </div>
+                        <div class="checkout-item-price">€{{ item.get_total_price }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="checkout-totals">
+                    <div class="total-row"><span>Subtotal</span><span>€{{ total }}</span></div>
+                    <div class="total-row"><span>Shipping</span><span class="text-success">Free</span></div>
+                    <div class="total-row total-row-grand"><span>Total</span><span>€{{ total }}</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="eco-checkout-note mt-3">
+            <div class="eco-checkout-row"><i class="fas fa-box" style="color:var(--sage);"></i><span>Eco-friendly packaging</span></div>
+            <div class="eco-checkout-row"><i class="fas fa-globe" style="color:var(--sage);"></i><span>Carbon offset shipping</span></div>
+            <div class="eco-checkout-row"><i class="fas fa-shield-alt" style="color:var(--sage);"></i><span>SSL secure checkout</span></div>
+        </div>
+    </div>
+</div>
+
+<style>
+.checkout-steps { display:flex; align-items:center; gap:0; }
+.step { display:flex; align-items:center; gap:8px; font-size:0.82rem; font-weight:500; color:var(--gray-400); letter-spacing:0.04em; text-transform:uppercase; }
+.step-active { color:var(--sage-dark); }
+.step-num { width:26px; height:26px; border-radius:50%; background:var(--gray-200); color:var(--gray-600); display:flex; align-items:center; justify-content:center; font-size:0.78rem; font-weight:600; }
+.step-active .step-num { background:var(--sage); color:white; }
+.step-line { flex:0 0 32px; height:1px; background:var(--border); margin:0 8px; }
+
+.demo-notice {
+    background:#EFF6FF; color:#1E40AF; border-left:3px solid #60A5FA;
+    padding:0.75rem 1rem; border-radius:var(--radius-sm); font-size:0.85rem; margin-bottom:1.25rem;
+}
+
+.card-input-wrap { position:relative; }
+.card-icons { position:absolute; right:10px; top:50%; transform:translateY(-50%); display:flex; gap:6px; color:var(--gray-400); font-size:1.1rem; }
+
+.place-order-btn { padding:0.8rem 2rem; border-radius:10px; }
+
+.checkout-items { padding:1rem 1.25rem; }
+.checkout-item { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.checkout-item-img-wrap { position:relative; flex-shrink:0; }
+.checkout-item-img { width:54px; height:54px; object-fit:cover; border-radius:8px; }
+.item-qty-badge { position:absolute; top:-6px; right:-6px; background:var(--sage); color:white; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:0.65rem; font-weight:700; }
+.checkout-item-info { flex:1; }
+.checkout-item-name { font-size:0.88rem; font-weight:500; color:var(--charcoal); margin:0; }
+.checkout-item-cat { font-size:0.75rem; color:var(--gray-600); margin:0; }
+.checkout-item-price { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; }
+
+.checkout-totals { border-top:1px solid var(--border); padding:1rem 1.25rem; }
+.total-row { display:flex; justify-content:space-between; font-size:0.9rem; color:var(--charcoal); margin-bottom:8px; }
+.total-row-grand { font-weight:600; font-size:1.05rem; border-top:1px solid var(--border); padding-top:8px; margin-top:4px; }
+
+.eco-checkout-note { background:white; border:1px solid var(--border); border-radius:var(--radius); padding:1rem 1.25rem; }
+.eco-checkout-row { display:flex; align-items:center; gap:10px; font-size:0.82rem; color:var(--gray-600); margin-bottom:8px; }
+.eco-checkout-row:last-child { margin:0; }
+</style>
+{% endblock content %}

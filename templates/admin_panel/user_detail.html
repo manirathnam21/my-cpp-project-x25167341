@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+    <div class="admin-breadcrumb mb-2">
+        <a href="{% url 'admin-dashboard' %}">Dashboard</a> / <a href="{% url 'admin-user-management' %}">Users</a> / {{ user_profile.username }}
+    </div>
+    <h1>{{ user_profile.username }}</h1>
+</div>
+
+<div class="row mb-4">
+    <!-- USER INFO -->
+    <div class="col-md-6 mb-3">
+        <div class="card h-100">
+            <div class="card-header"><i class="fas fa-user mr-2" style="color:var(--sage);"></i>Account Information</div>
+            <div class="card-body">
+                <div class="info-row"><span class="info-key">Username</span><span>{{ user_profile.username }}</span></div>
+                <div class="info-row"><span class="info-key">Email</span><span>{{ user_profile.email }}</span></div>
+                <div class="info-row"><span class="info-key">Full Name</span><span>{{ user_profile.get_full_name|default:"Not provided" }}</span></div>
+                <div class="info-row"><span class="info-key">Date Joined</span><span>{{ user_profile.date_joined|date:"F d, Y" }}</span></div>
+                <div class="info-row"><span class="info-key">Last Login</span><span>{{ user_profile.last_login|date:"F d, Y" }}</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="col-md-6 mb-3">
+        <div class="card h-100">
+            <div class="card-header"><i class="fas fa-id-card mr-2" style="color:var(--sage);"></i>Profile</div>
+            <div class="card-body">
+                {% if user_profile.profile %}
+                <div class="d-flex align-items-center gap-3 mb-3" style="gap:1rem;">
+                    <img src="{{ user_profile.profile.image.url }}" alt="{{ user_profile.username }}" class="user-detail-avatar">
+                    <div>
+                        <p class="mb-0 font-weight-bold">{{ user_profile.username }}</p>
+                        {% if user_profile.profile.bio %}
+                            <p class="text-muted mb-0" style="font-size:0.85rem;">{{ user_profile.profile.bio }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- <div class="info-row">
+                    <span class="info-key">Eco Preference</span>
+                    <span>
+                        {% if user_profile.profile.sustainability_preference %}
+                            <span class="badge badge-success">Enabled</span>
+                        {% else %}
+                            <span class="badge badge-secondary">Disabled</span>
+                        {% endif %}
+                    </span>
+                </div> -->
+                {% else %}
+                    <p class="text-muted">No profile information available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- USER ORDERS -->
+<div class="card">
+    <div class="card-header"><i class="fas fa-box mr-2" style="color:var(--sage);"></i>Order History</div>
+    <div class="card-body p-0">
+        {% if orders %}
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>Order #</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td><strong>#{{ order.id }}</strong></td>
+                        <td>{{ order.created|date:"M d, Y" }}</td>
+                        <td>
+                            {% if order.status == 'pending' %}<span class="badge badge-warning">{{ order.get_status_display }}</span>
+                            {% elif order.status == 'processing' %}<span class="badge badge-info">{{ order.get_status_display }}</span>
+                            {% elif order.status == 'shipped' %}<span class="badge badge-primary">{{ order.get_status_display }}</span>
+                            {% elif order.status == 'delivered' %}<span class="badge badge-success">{{ order.get_status_display }}</span>
+                            {% elif order.status == 'cancelled' %}<span class="badge badge-danger">{{ order.get_status_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td><strong>€{{ order.total_price }}</strong></td>
+                        <td><a href="{% url 'admin-order-detail' order.id %}" class="btn btn-sm btn-outline-primary">View</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center text-muted py-4">This user has not placed any orders yet.</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="{% url 'admin-user-management' %}" class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-arrow-left mr-2"></i>Back to Users
+    </a>
+</div>
+
+<style>
+.admin-breadcrumb { font-size:0.82rem; color:var(--gray-600); }
+.admin-breadcrumb a { color:var(--sage); text-decoration:none; }
+.user-detail-avatar { width:70px; height:70px; border-radius:50%; object-fit:cover; border:2px solid var(--border); }
+.info-row { display:flex; justify-content:space-between; font-size:0.88rem; padding:7px 0; border-bottom:1px solid var(--border); }
+.info-row:last-child { border-bottom:none; }
+.info-key { color:var(--gray-600); font-weight:500; }
+</style>
+{% endblock content %}

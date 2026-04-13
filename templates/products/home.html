@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- HERO -->
+<!-- <section class="hero-section mb-5">
+    <div class="hero-inner">
+        <div class="row align-items-center">
+            <div class="col-lg-6 hero-text-col">
+                <div class="hero-label">Sustainable · Ethical · Beautiful</div>
+                <h1 class="hero-heading">Fashion That<br><em>Loves the Planet</em></h1>
+                <p class="hero-sub">Discover curated eco-friendly fashion from sellers who share your values. Every piece tells a story of sustainability.</p>
+                <div class="hero-actions">
+                    <a href="{% url 'products' %}" class="btn btn-primary btn-lg mr-3">
+                        <i class="fas fa-shopping-bag mr-2"></i>Shop Collection
+                    </a>
+                    <a href="#categories" class="btn btn-outline-secondary btn-lg">Explore Categories</a>
+                </div>
+                <div class="hero-stats mt-4">
+                    <div class="stat-item">
+                        <span class="stat-num">100%</span>
+                        <span class="stat-label">Eco Verified</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-num">500+</span>
+                        <span class="stat-label">Products</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-num">50+</span>
+                        <span class="stat-label">Sellers</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 hero-img-col d-none d-lg-block">
+                <div class="hero-img-grid">
+                    <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&q=80" alt="Paw Sphere" class="hero-img hero-img-main">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=80" alt="Sustainable Clothing" class="hero-img hero-img-sm1">
+                    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=300&q=80" alt="Ethical Fashion" class="hero-img hero-img-sm2">
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+<!-- CATEGORIES -->
+<section id="categories" class="mb-5">
+    <h2 class="section-title">Shop by Category</h2>
+    <div class="row">
+        {% for category in categories %}
+        <div class="col-md-4 mb-4">
+            <div class="category-card card">
+                <div class="category-img-wrap">
+                    <img src="https://imgs.search.brave.com/xzba1syFoQicGErCpyUGwyIwgcSKgIAnAah4U_bVVJ0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMjMv/MjM2LzU1Mi9zbWFs/bC9haS1nZW5lcmF0/ZWQtdHdvLXJhYmJp/dHMtY3V0ZS1mbHVm/ZnktZG9nLWFuZC1y/ZWQtZ2luZ2VyLWNh/dC1zaXR0aW5nLXNp/ZGUtYnktc2lkZS1p/bi1zaGVsdGVyLXBl/dC1hZG9wdGlvbi1j/b25jZXB0LWdlbmVy/YXRpdmUtYWktcGhv/dG8uanBn" alt="{{ category.name }}" class="category-img">
+                    <div class="category-overlay">
+                        <h5 class="category-name">{{ category.name }}</h5>
+                        <p class="category-desc">{{ category.description|truncatechars:80 }}</p>
+                        <a href="{% url 'category-products' category.id %}" class="btn btn-light btn-sm mt-2">View Products</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title mb-0" style="text-align:left;">Featured Products</h2>
+        <a href="{% url 'products' %}" class="btn btn-outline-primary btn-sm">View All <i class="fas fa-arrow-right ml-1"></i></a>
+    </div>
+    <div class="row">
+        {% for product in products %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card product-card">
+                <div class="card-img-wrapper">
+                    <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}">
+                    <!-- <div class="sustainability-badge">
+                        {% if product.sustainability_score >= 80 %}
+                            <span class="badge badge-success">Eco {{ product.sustainability_score }}</span>
+                        {% elif product.sustainability_score >= 50 %}
+                            <span class="badge badge-info">Eco {{ product.sustainability_score }}</span>
+                        {% else %}
+                            <span class="badge badge-warning">Eco {{ product.sustainability_score }}</span>
+                        {% endif %}
+                    </div> -->
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <div class="card-subtitle mb-2">€{{ product.price }}</div>
+                    <p class="card-text text-muted" style="font-size:0.85rem;">{{ product.description|truncatechars:90 }}</p>
+                </div>
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <a href="{% url 'product-detail' product.id %}" class="btn btn-primary btn-sm">View Details</a>
+                    <small class="text-muted">by {{ product.seller.username }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- ECO PROMISE BANNER -->
+<!-- <section class="eco-banner mb-5">
+    <div class="row align-items-center">
+        <div class="col-md-7">
+            <h3 class="eco-banner-title">Our Commitment to the Planet</h3>
+            <p class="eco-banner-text">Every product on our marketplace passes a rigorous sustainability audit. We work only with sellers who use ethical production practices, recycled or organic materials, and responsible packaging.</p>
+            <a href="{% url 'products' %}" class="btn btn-success mt-2">Explore Our Collection</a>
+        </div>
+        <div class="col-md-5 text-center mt-3 mt-md-0">
+            <img src="https://images.unsplash.com/photo-1542601098-8fc114e148e2?w=500&q=80" alt="Eco commitment" class="eco-banner-img">
+        </div>
+    </div>
+</section> -->
+
+<style>
+/* HERO */
+.hero-section { margin-top: 0.5rem; }
+.hero-inner {
+    background: linear-gradient(135deg, #F0F7F2 0%, #F7F3EE 100%);
+    border-radius: 20px;
+    padding: 4rem 3rem;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+}
+.hero-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 1rem;
+}
+.hero-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.2rem;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--charcoal);
+    margin-bottom: 1.2rem;
+}
+.hero-heading em {
+    font-style: italic;
+    color: var(--sage-dark);
+}
+.hero-sub {
+    font-size: 1rem;
+    color: var(--gray-600);
+    max-width: 440px;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+.hero-stats { display: flex; align-items: center; gap: 1.5rem; }
+.stat-item { display: flex; flex-direction: column; }
+.stat-num { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: var(--charcoal); line-height: 1; }
+.stat-label { font-size: 0.75rem; color: var(--gray-600); margin-top: 2px; letter-spacing: 0.04em; }
+.stat-divider { width: 1px; height: 32px; background: var(--border); }
+
+.hero-img-grid { position: relative; height: 380px; }
+.hero-img { border-radius: 16px; object-fit: cover; box-shadow: var(--shadow-lg); }
+.hero-img-main { width: 340px; height: 320px; position: absolute; top: 0; right: 0; }
+.hero-img-sm1 { width: 180px; height: 160px; position: absolute; bottom: 10px; right: 300px; }
+.hero-img-sm2 { width: 160px; height: 150px; position: absolute; bottom: 0; right: 110px; }
+
+/* TRUST STRIP */
+.trust-strip {
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 1.5rem 1rem;
+}
+.trust-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--gray-600);
+    letter-spacing: 0.03em;
+    padding: 0.5rem;
+}
+.trust-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--sand-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--sage);
+    font-size: 1rem;
+    margin-bottom: 4px;
+    padding: 10px;
+}
+
+/* CATEGORIES */
+.category-card { border: none; border-radius: 16px; overflow: hidden; }
+.category-img-wrap { position: relative; height: 260px; overflow: hidden; }
+.category-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.category-card:hover .category-img { transform: scale(1.08); }
+.category-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(45,45,45,0.75) 0%, rgba(45,45,45,0.1) 60%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+    color: white;
+}
+.category-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: white;
+}
+.category-desc { font-size: 0.8rem; color: rgba(255,255,255,0.8); margin: 0; }
+
+/* ECO BANNER */
+.eco-banner {
+    background: linear-gradient(135deg, #EFF6EF 0%, #E8F4EC 100%);
+    border-radius: 20px;
+    padding: 3rem;
+    border: 1px solid #C8E6D0;
+}
+.eco-banner-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--charcoal);
+    margin-bottom: 1rem;
+}
+.eco-banner-text {
+    font-size: 0.95rem;
+    color: var(--gray-600);
+    line-height: 1.75;
+    max-width: 480px;
+}
+.eco-banner-img {
+    width: 100%;
+    max-width: 320px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+}
+</style>
+{% endblock content %}

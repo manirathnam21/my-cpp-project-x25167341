@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1>User Management</h1>
+            <p class="text-muted mb-0" style="font-size:0.9rem;">Manage registered customers and accounts</p>
+        </div>
+        <div class="admin-breadcrumb"><a href="{% url 'admin-dashboard' %}">Dashboard</a> / Users</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Joined</th>
+                        <th>Last Login</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>
+                            <div class="user-cell">
+                                <div class="user-avatar-sm">{{ user.username|first|upper }}</div>
+                                <div>
+                                    <div style="font-weight:500; font-size:0.9rem;">{{ user.username }}</div>
+                                    <div style="font-size:0.75rem; color:var(--gray-600);">ID: {{ user.id }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="font-size:0.88rem;">{{ user.email }}</td>
+                        <td style="font-size:0.85rem;">{{ user.date_joined|date:"M d, Y" }}</td>
+                        <td style="font-size:0.85rem;">{{ user.last_login|date:"M d, Y" }}</td>
+                        <td><a href="{% url 'admin-user-detail' user.id %}" class="btn btn-sm btn-outline-primary">View</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5" class="text-center text-muted py-4">No users found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.admin-breadcrumb { font-size:0.82rem; color:var(--gray-600); }
+.admin-breadcrumb a { color:var(--sage); text-decoration:none; }
+.user-cell { display:flex; align-items:center; gap:10px; }
+.user-avatar-sm { width:34px; height:34px; border-radius:50%; background:var(--sage); color:white; display:flex; align-items:center; justify-content:center; font-weight:600; font-size:0.85rem; flex-shrink:0; }
+</style>
+{% endblock content %}

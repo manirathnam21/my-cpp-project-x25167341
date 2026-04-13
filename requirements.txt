@@ -1,0 +1,13 @@
+django
+django-crispy-forms
+pillow
+boto3
+pylint
+pytest
+pytest-django
+crispy-bootstrap4
+pytest-cov
+boto3
+psycopg2-binary
+requests
+orders-csv-export-lib
