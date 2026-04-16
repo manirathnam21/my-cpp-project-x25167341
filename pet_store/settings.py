@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-your-secret-key-here'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['eb-x23304723.us-east-1.elasticbeanstalk.com/','*']
+ALLOWED_HOSTS = ['*','http://paw-sphere.us-east-1.elasticbeanstalk.com']
 
 # Application definition
 
@@ -80,8 +80,13 @@ DATABASES = {
         'PASSWORD': 'rds-cpp-x25167341',
         'HOST': 'rds-cpp-x25167341.ci7guvob7pos.us-east-1.rds.amazonaws.com',  # e.g., 'localhost' or remote host
         'PORT': '5432',          # default PostgreSQL port
+        'OPTIONS': {
+            'timeout': 20,
+        }
+
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

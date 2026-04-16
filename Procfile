@@ -1,1 +1,1 @@
-web: gunicorn pet_store.wsgi:application --bind 0.0.0.0:8000
+web: gunicorn --workers=1 --threads=2 --timeout=300 --max-requests=1000 --worker-class=gthread pet_store.wsgi:application
